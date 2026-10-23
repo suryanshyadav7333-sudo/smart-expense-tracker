@@ -1,0 +1,320 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bloom - Smart Expense Tracker</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-page">
+  <div class="app">
+    <aside class="sidebar">
+      <a href="#" class="brand"><span class="brand-icon">✳</span> bloom<span class="brand-dot">.</span></a>
+
+      <p class="menu-label">WORKSPACE</p>
+      <nav>
+        <a class="nav-link active" href="#dashboard"><span>▦</span> Overview</a>
+        <a class="nav-link" href="#transactions"><span>↔</span> Transactions</a>
+        <a class="nav-link" href="#analytics"><span>◔</span> Analytics</a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="tip-card">
+          <div class="tip-icon">✦</div>
+          <h3>Small steps, big savings.</h3>
+          <p>Every mindful expense brings you closer to your goals.</p>
+        </div>
+
+<div class="profile-mini">
+  <div class="avatar">Y</div>
+  <div class="profile-info">
+    <strong>Your Wallet</strong>
+    <small>Personal account</small>
+  </div>
+  <button id="logoutButton" class="logout-btn" type="button">↪</button>
+</div>
+      </div>
+    </aside>
+
+    <main class="main-content" id="dashboard">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="today"></p>
+          <h1>Your money, <span>your story.</span></h1>
+          <p class="subtitle">A little clarity goes a long way. Here's your financial snapshot.</p>
+        </div>
+        <button class="primary-btn" id="openForm">＋ Add expense</button>
+      </header>
+
+      <section class="summary-grid">
+        <article class="summary-card balance-card">
+          <div class="card-heading"><span>Monthly spending</span><span class="round-icon">↗</span></div>
+          <h2 id="totalSpent">₹0</h2>
+          <p class="card-note"><span class="status-dot"></span> Total expenses this month</p>
+          <div class="mini-bars" aria-hidden="true">
+            <i style="height:35%"></i><i style="height:53%"></i>
+            <i style="height:42%"></i><i style="height:68%"></i>
+            <i style="height:48%"></i><i style="height:80%"></i>
+            <i style="height:57%"></i><i style="height:94%"></i>
+            <i style="height:62%"></i><i style="height:76%"></i>
+            <i style="height:45%"></i><i style="height:88%"></i>
+          </div>
+        </article>
+
+        <article class="summary-card income-card">
+          <div class="card-heading"><span>Monthly budget</span><span class="round-icon">◎</span></div>
+          <h2 id="budgetDisplay">₹20,000</h2>
+          <p class="card-note">Your spending limit</p>
+          <button class="text-btn" id="editBudget">Edit budget ↗</button>
+        </article>
+
+        <article class="summary-card savings-card">
+          <div class="card-heading"><span>Money remaining</span><span class="round-icon">♡</span></div>
+          <h2 id="remaining">₹20,000</h2>
+          <p class="card-note" id="remainingNote">Available from your budget</p>
+          <div class="progress-track"><div id="budgetProgress"></div></div>
+        </article>
+      </section>
+
+      <section class="content-grid">
+        <article class="panel spending-panel" id="analytics">
+          <div class="panel-heading">
+            <div><h2>Where it goes</h2><p>Your spending by category</p></div>
+            <span class="soft-tag">This month</span>
+          </div>
+          <div class="chart-area" id="chartArea">
+            <canvas id="expenseChart" aria-label="Expenses by category"></canvas>
+            <div class="empty-chart" id="emptyChart">
+              <span>◔</span><strong>Your chart starts here</strong><small>Add an expense to see the breakdown.</small>
+            </div>
+          </div>
+          <div class="category-legend" id="categoryLegend"></div>
+        </article>
+
+        <article class="panel quick-panel">
+          <div class="panel-heading">
+            <div><h2>Quick add</h2><p>Log it before you forget it.</p></div>
+            <span class="quick-spark">✦</span>
+          </div>
+          <form id="expenseForm">
+            <label for="expenseTitle">What did you spend on?</label>
+            <input id="expenseTitle" type="text" placeholder="e.g. Coffee with friends" maxlength="80" required>
+            <div class="form-row">
+              <div class="field">
+                <label for="expenseAmount">Amount (₹)</label>
+                <input id="expenseAmount" type="number" min="0.01" max="100000000" step="0.01" placeholder="250" required>
+              </div>
+              <div class="field">
+                <label for="expenseCategory">Category</label>
+                <select id="expenseCategory">
+                  <option value="Food">🍜 Food</option>
+                  <option value="Transport">🚗 Transport</option>
+                  <option value="Shopping">🛍 Shopping</option>
+                  <option value="Bills">💡 Bills</option>
+                  <option value="Health">🌿 Health</option>
+                  <option value="Education">📚 Education</option>
+                  <option value="Entertainment">🎬 Fun</option>
+                  <option value="Other">✳ Other</option>
+                </select>
+              </div>
+            </div>
+            <label for="expenseDate">Date</label>
+            <input id="expenseDate" type="date" required>
+
+            
+<div class="recurring-option">
+  <label class="recurring-label">
+    <input
+      type="checkbox"
+      id="isRecurring"
+    />
+    <span>
+      <strong>Repeat every month</strong>
+      <small>
+        Automatically track this expense monthly
+      </small>
+    </span>
+  </label>
+</div>
+
+            <button type="submit" class="primary-btn full-btn">Add to my expenses <span>↗</span></button>
+            <p class="form-message" id="formMessage" role="status"></p>
+          </form>
+        </article>
+      </section>
+<div class="month-filter-container">
+  <label for="monthFilter">📅 Select Month:</label>
+  <input type="month" id="monthFilter">
+</div>
+
+<section class="panel insights-panel" id="smartInsights">
+  <div class="panel-heading">
+    <div>
+      <h2>Smart spending insights</h2>
+      <p>A little insight can make a big difference.</p>
+    </div>
+    <span class="insights-sparkle">✦</span>
+  </div>
+
+  <div class="insights-grid">
+    <article class="insight-card insight-category">
+      <div class="insight-icon">🏆</div>
+      <p class="insight-label">Your biggest expense category</p>
+      <h3 id="insightCategory">Waiting for data...</h3>
+      <p class="insight-description" id="insightCategoryDetail">
+        Your spending breakdown will appear here.
+      </p>
+    </article>
+
+    <article class="insight-card insight-budget">
+      <div class="insight-icon">💰</div>
+      <p class="insight-label">Monthly budget status</p>
+      <h3 id="insightBudget">Calculating...</h3>
+      <p class="insight-description" id="insightBudgetDetail">
+        Your budget summary will appear here.
+      </p>
+    </article>
+
+    <article class="insight-card insight-tip">
+      <div class="insight-icon">💡</div>
+      <p class="insight-label">Your smart tip</p>
+      <h3 id="insightTipTitle">A tip for you</h3>
+      <p class="insight-description" id="insightTip">
+        Add expenses to receive a personalized spending suggestion.
+      </p>
+    </article>
+  </div>
+</section>
+
+
+<section class="panel trend-panel" id="spendingTrends">
+  <div class="panel-heading">
+    <div>
+      <h2>Your spending journey</h2>
+      <p>Daily spending throughout the selected month.</p>
+    </div>
+    <span class="soft-tag">Daily trend</span>
+  </div>
+
+  <div class="trend-chart-area">
+    <canvas
+      id="spendingTrendChart"
+      role="img"
+      aria-label="Daily spending trend for the selected month"
+    ></canvas>
+    <p id="emptyTrend" class="empty-trend" hidden>
+      Add expenses for this month to see your spending trend.
+    </p>
+  </div>
+</section>
+
+
+<section class="panel wellness-panel" id="financialWellness">
+  <div class="panel-heading">
+    <div>
+      <h2>Your financial wellness</h2>
+      <p>A simple snapshot of your spending habits.</p>
+    </div>
+    <span class="wellness-icon">💚</span>
+  </div>
+
+  <div class="wellness-content">
+    <div class="wellness-score-circle" id="wellnessCircle">
+      <strong id="wellnessScore">--</strong>
+      <span>/ 100</span>
+    </div>
+
+    <div class="wellness-details">
+      <h3 id="wellnessTitle">Calculating your score...</h3>
+      <p id="wellnessMessage">
+        Your score will appear after your expenses are analyzed.
+      </p>
+      <div class="wellness-progress-track">
+        <div id="wellnessProgress"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+      <section class="panel transactions-panel" id="transactions">
+
+<div class="panel-heading transaction-heading">
+  <div>
+    <h2>Recent transactions</h2>
+    <p>Your money trail, all in one place.</p>
+  </div>
+
+  <div class="transaction-actions">
+    <input
+      type="search"
+      id="expenseSearch"
+      class="expense-search"
+      placeholder="🔎 Search expenses..."
+      aria-label="Search expenses"
+    />
+
+    <button type="button" id="exportCsvBtn" class="export-button">
+      📥 Export CSV
+    </button>
+
+    <select id="filterCategory" aria-label="Filter transactions by category">
+      <option value="All">All categories</option>
+      <option value="Food">Food</option>
+      <option value="Transport">Transport</option>
+      <option value="Shopping">Shopping</option>
+      <option value="Bills">Bills</option>
+      <option value="Health">Health</option>
+      <option value="Education">Education</option>
+      <option value="Entertainment">Entertainment</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+</div>
+
+          <select id="filterCategory" aria-label="Filter transactions by category">
+            <option value="All">All categories</option>
+            <option value="Food">Food</option>
+            <option value="Transport">Transport</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Bills">Bills</option>
+            <option value="Health">Health</option>
+            <option value="Education">Education</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="transaction-list" id="transactionList"></div>
+        <div class="empty-transactions" id="emptyTransactions">
+          <span>✳</span><h3>A fresh start!</h3><p>Your expenses will appear here when you add them.</p>
+        </div>
+      </section>
+
+      <footer>Made for a calmer relationship with money <span>✳</span></footer>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="budgetModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="budgetTitle">
+      <button class="modal-close" id="closeBudget" aria-label="Close">×</button>
+      <div class="modal-emoji">💛</div>
+      <h2 id="budgetTitle">Set your monthly budget</h2>
+      <p>Choose a spending limit that feels right for you.</p>
+      <form id="budgetForm">
+        <label for="budgetInput">Monthly budget (₹)</label>
+        <input id="budgetInput" type="number" min="0" max="100000000" step="0.01" required>
+        <button class="primary-btn full-btn" type="submit">Save my budget</button>
+      </form>
+    </div>
+  </div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="auth-guard.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
+
